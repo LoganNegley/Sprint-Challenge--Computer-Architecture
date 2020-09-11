@@ -139,14 +139,6 @@ class CPU:
                 self.reg[self.sp] += 1
                 self.pc += 2
 
-            elif instrucion == CALL:
-                #get given register in the operand
-                pass
-
-            elif instrucion == RET:
-                pass
-            
-
             elif instrucion == HLT: #stops program running 
                 self.running = False
                 self.pc += 1
