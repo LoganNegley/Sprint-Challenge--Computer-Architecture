@@ -7,9 +7,9 @@ LDI = 0b10000010
 MUL = 0b10100010
 PUSH = 0b01000101
 POP = 0b01000110
-CALL = 0b01010000
-RET = 0b00010001
 CMP = 0b10100111
+JMP = 0b01010100
+JEQ = 0b01010101
 
 # Flags
 L = 0b00000100
@@ -97,8 +97,10 @@ class CPU:
                 self.fl = L
             if self.reg[reg_a] > self.reg[reg_b]:
                 self.fl = G
+
         else:
             raise Exception("Unsupported ALU operation")
+
 
     def trace(self):
         """
@@ -124,40 +126,50 @@ class CPU:
         """Run the CPU."""
 
         while self.running:
-            instrucion = self.ram_read(self.pc)
+            instruction = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
             
-            if instrucion == LDI: #store value in register or set register to value
+            if instruction == LDI: #store value in register or set register to value
                 #register location at pc + 1
                 #value is at pc + 2
                 self.reg[operand_a] = operand_b
                 self.pc += 3
 
-            elif instrucion == PRN: #PRN prints numeric value stored in given register
+            elif instruction == PRN: #PRN prints numeric value stored in given register
                 print(self.reg[operand_a])
                 self.pc += 2
 
-            elif instrucion == MUL:
+            elif instruction == MUL:
                 self.alu("MUL", operand_a, operand_b)
                 self.pc += 3
+            
+            # MVP instructions below
+            elif instruction == CMP:
+                self.alu('CMP', operand_a, operand_b)  #run ALU 
 
-            elif instrucion == PUSH:
+            elif instruction == JMP:
+                 self.pc = self.reg[operand_b] #setting program counter to given register
+
+            elif instruction == JEQ:
+                pass
+
+
+
+            elif instruction == PUSH:
                 value_in_register = self.reg[operand_a]
                 self.reg[self.sp] -= 1     #decrement the stack pointer
                 self.ram[self.reg[self.sp]] = value_in_register    #write the value of the given registter to memory at the SP location
                 self.pc += 2
 
-            elif instrucion == POP:
+            elif instruction == POP:
                 value_from_memory = self.ram[self.reg[self.sp]]
                 self.reg[operand_a] = value_from_memory
                 self.reg[self.sp] += 1
                 self.pc += 2
 
-            elif instrucion == HLT: #stops program running 
+            elif instruction == HLT: #stops program running 
                 self.running = False
                 self.pc += 1
-
-
 
 
