@@ -1,6 +1,6 @@
 import sys
 
-
+# Instructions
 HLT = 0b00000001
 PRN = 0b01000111
 LDI = 0b10000010
@@ -10,6 +10,11 @@ POP = 0b01000110
 CALL = 0b01010000
 RET = 0b00010001
 CMP = 0b10100111
+
+# Flags
+L = 0b00000100
+G = 0b00000010
+E = 0b00000001
 
 class CPU:
     """Main CPU class."""
@@ -84,6 +89,10 @@ class CPU:
         #elif op == "SUB": etc
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
+        
+        elif op == "CMP":
+            if self.reg[reg_a] == self.register[reg_b]:
+                self.fl = 1
         else:
             raise Exception("Unsupported ALU operation")
 
