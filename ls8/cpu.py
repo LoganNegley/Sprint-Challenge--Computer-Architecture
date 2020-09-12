@@ -149,10 +149,21 @@ class CPU:
                 self.alu('CMP', operand_a, operand_b)  #run ALU 
 
             elif instruction == JMP:
-                 self.pc = self.reg[operand_b] #setting program counter to given register
+                 self.pc = self.reg[operand_a] #setting program counter to given register
 
             elif instruction == JEQ:
-                pass
+                if self.fl == E:
+                    self.pc = self.reg[operand_a]
+                # need an else if they are not equal????
+                else:
+                    self.pc += 1
+
+            elif instruction == JNE:
+                if self.fl != E:
+                    self.pc = self.reg[operand_a]
+                #else do what?
+                else:
+                    self.pc += 1
 
 
 
