@@ -27,7 +27,7 @@ class CPU:
         self.pc = 0        #program counter----currently executing instuction
         self.running = True #if program is running 
         self.sp = 7
-        self.fl = 0
+        self.fl = [0] * 8
 
 
     def ram_read(self, address):
@@ -155,16 +155,14 @@ class CPU:
             elif instruction == JEQ:
                 if self.fl == E:
                     self.pc = self.reg[operand_a]
-                # need an else if they are not equal????
                 else:
-                    self.pc += 1
+                    self.pc += 2
 
             elif instruction == JNE:
                 if self.fl != E:
                     self.pc = self.reg[operand_a]
-                #else do what?
                 else:
-                    self.pc += 1
+                    self.pc += 2
 
 
 
