@@ -45,21 +45,6 @@ class CPU:
         """Load a program into memory."""
 
         address = 0
-        # For now, we've just hardcoded a program:
-
-        # program = [
-        #     # From print8.ls8
-        #     0b10000010, # LDI R0,8
-        #     0b00000000,
-        #     0b00001000,
-        #     0b01000111, # PRN R0
-        #     0b00000000,
-        #     0b00000001, # HLT
-        # ]
-        # for instruction in program:
-        #       self.ram[address] = instruction
-        #     address += 1
-
 
         # Bringing in dynamic programs
         file = sys.argv[1]           #Open file using command line
@@ -74,8 +59,8 @@ class CPU:
                     continue
 
                 program_num = int(program_value, 2)           #the num left from strip is usable to add to ram---converts string to number
-                # self.ram_write(address, program_num)       # add num from program to the our ram
-                self.ram[address] = program_num
+                self.ram_write(address, program_num)       # add num from program to the our ram
+                # self.ram[address] = program_num
                 address += 1
 
             # print(program_num)
@@ -98,7 +83,6 @@ class CPU:
                 self.fl = L
             if self.reg[reg_a] > self.reg[reg_b]:
                 self.fl = G
-
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -148,6 +132,7 @@ class CPU:
             # MVP instructions below
             elif instruction == CMP:
                 self.alu('CMP', operand_a, operand_b)  #run ALU 
+                self.pc += 3
 
             elif instruction == JMP:
                  self.pc = self.reg[operand_a] #setting program counter to given register
